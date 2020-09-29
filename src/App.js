@@ -23,11 +23,47 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 
 function App() {
+  const [user] = useAuthState(auth);
+
   return (
     <div className="App">
-      <header></header>
+      <header>
+        <h1>React + Firebase Chat app!</h1>
+        <SignOut />
+      </header>
+
+      <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
   );
 }
 
+function SignIn() {
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider);
+  };
+
+  return (
+    <>
+      <button className="sign-in" onClick={signInWithGoogle}>
+        Sign in with Google
+      </button>
+      <p>Please be respectful</p>
+    </>
+  );
+}
+
+function SignOut() {
+  return (
+    auth.currentUser && (
+      <button className="sign-out" onClick={() => auth.signOut()}>
+        Sign Out
+      </button>
+    )
+  );
+}
+
+function ChatRoom() {
+  return <></>;
+}
 export default App;
