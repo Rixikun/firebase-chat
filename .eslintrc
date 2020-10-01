@@ -1,0 +1,9 @@
+{
+  "extends": ["eslint:recommended"],
+  "rules": {
+    // Additional, per-project rules...
+  },
+  "resolve": {
+    "extensions": [".js", ".json", ".ts", ".tsx"]
+  }
+}

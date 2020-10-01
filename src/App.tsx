@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import "./App.css";
 
 import firebase from "firebase/app";
@@ -63,19 +63,40 @@ function SignOut() {
   );
 }
 
-function ChatRoom() {
-  const dummy = useRef();
+interface ChatMessageItem {
+  id: number;
+  uid: string;
+  text: string;
+  createdAt: Date;
+  photoURL?: string;
+}
+
+interface ChatMessages {
+  messages?: ChatMessageItem[];
+}
+
+const ChatRoom: React.FC = () => {
+  const dummy = useRef<HTMLSpanElement>(null);
+  useLayoutEffect(() => {
+    console.log(dummy);
+  });
   const messagesRef = firestore.collection("messages");
   const query = messagesRef.orderBy("createdAt").limit(25);
 
-  const [messages] = useCollectionData(query, { idField: "id" });
-
+  const [messages]: any = useCollectionData(query, {
+    idField: "id",
+  });
   const [formValue, setFormValue] = useState("");
 
-  const sendMessage = async (e) => {
+  const sendMessage = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { uid, photoURL } = auth.currentUser;
+    let uid: string = "";
+    let photoURL: string = "";
+    if (auth.currentUser) {
+      uid = auth.currentUser.uid;
+      photoURL = auth.currentUser.photoURL || "";
+    }
 
     await messagesRef.add({
       text: formValue,
@@ -85,14 +106,15 @@ function ChatRoom() {
     });
 
     setFormValue("");
-    dummy.current.scrollIntoView({ behavior: "smooth" });
+    if (dummy.current !== null) {
+      dummy.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
     <>
       <main>
-        {messages &&
-          messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
+        {messages && <ChatMessage messages={messages} />}
 
         <span ref={dummy}></span>
       </main>
@@ -110,25 +132,30 @@ function ChatRoom() {
       </form>
     </>
   );
-}
-function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+};
+const ChatMessage: React.FunctionComponent<ChatMessages> = (props) => {
+  const messages = props.messages;
 
-  const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
+  const res = messages?.length
+    ? messages.map((msg, idx) => {
+        const { text, uid, photoURL } = msg;
+        const messageClass =
+          uid === auth.currentUser?.uid ? "sent" : "received";
+        return (
+          <div className={`message ${messageClass}`} key={idx}>
+            <img
+              src={
+                photoURL ||
+                "https://pm1.narvii.com/6336/857c16b5b11e6e3a67ad74d62f667c35aab93735_00.jpg"
+              }
+              alt="user-icon"
+            />
+            <p>{text}</p>
+          </div>
+        );
+      })
+    : "";
 
-  return (
-    <>
-      <div className={`message ${messageClass}`}>
-        <img
-          src={
-            photoURL ||
-            "https://pm1.narvii.com/6336/857c16b5b11e6e3a67ad74d62f667c35aab93735_00.jpg"
-          }
-          alt="user-icon"
-        />
-        <p>{text}</p>
-      </div>
-    </>
-  );
-}
+  return <>{res}</>;
+};
 export default App;
