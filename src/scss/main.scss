@@ -1,0 +1,222 @@
+@import "colors";
+@import "configs";
+@import "utilities";
+@import "button";
+
+body {
+  background-color: darken($color-main-bg, 10%);
+}
+
+.App {
+  text-align: center;
+  max-width: 728px;
+  margin: 0 auto;
+  header {
+    @include set-background($color-app-header);
+    height: 10vh;
+    min-height: 50px;
+    position: fixed;
+    width: 100%;
+    max-width: 728px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+    padding: 10px;
+    box-sizing: border-box;
+  
+    h1 {
+      font-size: 1.5em;
+    }
+  }
+   
+  section {
+    @include flex-center;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: lighten($color-app-bg, 5%);
+
+    p{
+      @include flex-center;
+    }
+  }
+}
+
+
+
+main {
+  padding: 10px;
+  height: 80vh;
+  margin: 10vh 0 10vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  
+  &::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $color-scrollbar-track;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $color-scrollbar-thumb;
+  }
+}
+
+
+
+input {
+  @include set-background($color-input-bg);
+  line-height: 1.5;
+  width: 80%;
+  font-size: 1.5rem;
+  outline: none;
+  border: none;
+  padding: 0 10px;
+}
+
+form {
+  @include set-background($color-form-bg);
+  height: 10vh;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 728px;
+  display: flex;
+  font-size: 1.5rem;
+
+  input {
+    font-size: 1rem;
+  }
+  
+  button {
+    width: 20%;
+    background-color: $color-form-btn-bg;
+    font-size: 1rem;
+    padding: 15px;
+    border-radius: 0;
+  }
+}
+
+
+.sign-in {
+  color: $color-btn;
+  background: white;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+ul,
+li {
+  text-align: left;
+  list-style: none;
+}
+
+p {
+  max-width: 500px;
+  margin-bottom: 12px;
+  line-height: 24px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  position: relative;
+  color: white;
+  text-align: center;
+}
+
+.message {
+  display: flex;
+  align-items: flex-end;
+}
+.sent img,
+.received img {
+  margin-bottom: 12px;
+}
+
+.sent {
+  flex-direction: row-reverse;
+  img {
+    display: none;
+  }
+  @include breakpoint(laptop) {
+    img {
+      display: block;
+    }
+  }
+
+  p {
+    @include set-background($color-sent);
+    align-self: flex-end;
+    text-align: left;
+    max-width: 80%;
+    margin-right: 12px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: calc(100% - 2.5rem);
+      left: calc(calc(100% - 12px);
+      width: 0;
+      border: 10px solid transparent;
+      border-left: 10px solid $color-sent;
+      border-bottom-left-radius: 20px;
+      border-top-left-radius: 20px;
+      transform: rotate(270deg);
+    }
+  }
+}
+
+.received p {
+  @include set-background($color-received);
+  margin-left: 12px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: calc(100% - 2.5rem);
+    right: calc(calc(100% - 12px);
+    width: 0;
+    border: 10px solid transparent;
+    border-right: 10px solid $color-received;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    transform: rotate(90deg);
+  }
+}
+
+img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 2px 5px;
+}
+
+/* larger screen */
+
+@include breakpoint(laptop) {
+  .sent {
+    img {
+      display: block;
+    }
+    p {
+      max-width: 70%;
+    }
+  }
+
+  .App header {
+    h1 {
+      font-size: 2em;
+    }
+  }
+
+  form {
+    input {
+      font-size: 1.5rem;
+    }
+    button {
+      font-size: 1.25rem;
+    }
+  }
+}

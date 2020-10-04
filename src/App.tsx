@@ -1,5 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
-import "./App.css";
+import "./scss/main.scss";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>React + Firebase Chat app!</h1>
+        <h1>Chatroom</h1>
         <SignOut />
       </header>
 

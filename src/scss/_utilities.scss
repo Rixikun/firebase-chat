@@ -1,0 +1,45 @@
+// margin & padding classes
+$space-amounts: (1, 2, 3, 4, 5);
+
+@each $space in $space-amounts {
+  .m-#{$space} {
+    margin: #{$space}rem;
+  }
+  .my-#{$space} {
+    margin: #{$space}rem 0;
+  }
+  .p-#{$space} {
+    padding: #{$space}rem;
+  }
+  .py-#{$space} {
+    padding: #{$space}rem 0;
+  }
+}
+
+@mixin breakpoint($screen) {
+  @if ($screen == desktop) {
+    @media (min-width: 70em) {
+      @content;
+    }
+  } @else if($screen == laptop) {
+    @media (min-width: 64em) {
+      @content;
+    }
+  } @else if $point == tablet {
+    @media (min-width: 50em) {
+      @content;
+    }
+  } @else if $point == phablet {
+    @media (min-width: 37.5em) {
+      @content;
+    }
+  } @else if $point == mobileonly {
+    @media (max-width: 37.5em) {
+      @content;
+    }
+  } @else if $point == handheld {
+    @media (max-width: 28.125em) {
+      @content;
+    }
+  }
+}
